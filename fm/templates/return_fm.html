@@ -1,0 +1,284 @@
+{% extends 'fm.html' %}
+
+{% block return %}
+{% if obj1.name != '' %}
+<nav class="navbar navbar-expand-lg-vertical navbar-light bg-light"
+     style="width: 180px; position: fixed; height: 600px; left: 5px">
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <button class="btn btn-info btn-lg dropdown-toggle" role="button" id="navbarDropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Створити
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" data-toggle="modal" data-target="#createdir"
+                   role="button" aria-expanded="false" aria-controls="createdir">Папку</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#createfile"
+                   role="button" aria-expanded="false" aria-controls="createfile">Файл</a>
+            </div>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button data-toggle="modal" data-target="#exampleModalScrollable4"
+                    class="btn btn-info btn-lg">Копіювати
+            </button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button data-toggle="modal" data-target="#exampleModalScrollable3"
+                    class="btn btn-info btn-lg">Перемістити
+            </button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button class="btn btn-info btn-lg" data-toggle="modal" data-target="#exampleModalScrollable">
+                Видалити
+            </button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button data-toggle="modal" data-target="#exampleModalScrollable2"
+                    class="btn btn-info btn-lg">Змінити назву
+            </button>
+        </li>
+    </ul>
+</nav>
+{% else %}
+<nav class="navbar navbar-expand-lg-vertical navbar-light bg-light"
+     style="width: 180px; position: fixed; left: 5px; height: 600px">
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <button disabled class="btn btn-secondary btn-lg dropdown-toggle" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Створити
+            </button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Копіювати</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Перемістити</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Видалити</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Змінити назву</button>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+
+<div class="modal fade" id="createdir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введіть назву папки:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'create_dir' %}" method="post">
+                {% csrf_token %}
+                <input required type="text" name="fullpath" class="form-control" id="exampleInput" value="{{obj1.path}}\">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                    <button type="submit" class="btn btn-primary">Створити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="createfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введіть назву файлу:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'create_file' %}" method="post">
+                {% csrf_token %}
+                <input required type="text" name="fullpath" class="form-control" value="{{obj1.path}}\">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                    <button type="submit" class="btn btn-primary">Створити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Оберіть елементи для видалення:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'delete_thing' %}" method="post">
+                    {% csrf_token %}
+                    {% for data in table1 %}
+                    <input type="hidden" name="path" value="{{ data.path }}">
+                    <input type="hidden" name="name" value="{{ data.name }}">
+                    {% endfor %}
+                    {% for data in table1 %}
+                    <div class="list-group" style="height: 40px">
+                        <div class="form-group form-check">
+                            <input name="file" type="checkbox" value="{{data.name}}" class="form-check-input"
+                                   id="exampleCheck">
+                            <label class="form-check-label" for="exampleCheck"
+                                   style='width: 230px'>{{ data.name }}</label>
+                            <label style='width: 100px'>{{ data.type }}</label>
+                            <label>{{ data.size }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                        <button type="submit" class="btn btn-danger">Видалити</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollable2" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle2">Внесіть зміни назв:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'change_thing' %}" method="post">
+                    {% csrf_token %}
+                    {% for data in table1 %}
+                    <input type="hidden" name="path" value="{{ data.path }}">
+                    <input type="hidden" name="name" value="{{ data.name }}">
+                    {% endfor %}
+                    {% for data in table1 %}
+                    <label><input required type="text" style='width: 250px' name="newname" class="form-control"
+                                  value="{{data.name}}"></label>
+                    <label style='width: 100px'>{{ data.type }}</label>
+                    <label>{{ data.size }}</label>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                        <button type="submit" class="btn btn-success">Змінити</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollable3" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle3" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle3">Виберіть файли для переміщення:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'move_thing' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{obj1.path}}</span>
+                        </div>
+                        <span><strong><font size="5">&#8594;</font></strong></span>
+                        <input required type="text" name="path" class="form-control" value="{{obj2.path}}">
+                    </div>
+                    <input type="hidden" name="path1" class="form-control" value="{{obj1.path}}">
+                    {% for data in table1 %}
+                    <div class="list-group" style="height: 40px">
+                        <div class="form-group form-check">
+                            <input name="file" type="checkbox" value="{{data.name}}" class="form-check-input"
+                                   id="exampleCheck3">
+                            <label class="form-check-label" for="exampleCheck3"
+                                   style='width: 230px'>{{ data.name }}</label>
+                            <label style='width: 100px'>{{ data.type }}</label>
+                            <label>{{ data.size }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                        <button type="submit" class="btn btn-success">Перемістити</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollable4" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle4" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle4">Виберіть файли для копіювання:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'copy_thing' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{obj1.path}}</span>
+                        </div>
+                        <span><strong><font size="5">&#8594;</font></strong></span>
+                        <input required type="text" name="path" class="form-control" value="{{obj2.path}}">
+                    </div>
+                    <input type="hidden" name="path1" class="form-control" value="{{obj1.path}}">
+                    {% for data in table1 %}
+                    <div class="list-group" style="height: 40px">
+                        <div class="form-group form-check">
+                            <input name="file" type="checkbox" value="{{data.name}}" class="form-check-input"
+                                   id="exampleCheck4">
+                            <label class="form-check-label" for="exampleCheck4"
+                                   style='width: 230px'>{{ data.name }}</label>
+                            <label style='width: 100px'>{{ data.type }}</label>
+                            <label>{{ data.size }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                        <button type="submit" class="btn btn-success">Копіювати</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block return %}
+<nav class="navbar navbar-expand-lg-vertical navbar-light bg-light"
+     style="width: 180px; position: fixed; left: 5px; height: 600px">
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <button disabled class="btn btn-secondary btn-lg dropdown-toggle" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Створити
+            </button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Копіювати</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Перемістити</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Видалити</button>
+        </li>
+        <p></p>
+        <li class="nav-item">
+            <button disabled class="btn btn-secondary btn-lg">Змінити назву</button>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mr-1 mt-1">
+    <div class="row" style="top: 20px; left: 100px">
+        <div class="col-sm-6" style="position: fixed; overflow: hidden; height: 600px; width: 600px">
+            <div style="overflow-y: auto; height: 600px; width: 5050px">
+                {% if obj1 != '' and obj1.name != '' %}
+                <div class="list-group" style="height: 75px;">
+                    <ul class="list-group list-group-horizontal-sm">
+                        <li class="list-group-item list-group-item" style="
+                    padding: 25px 0px 0px 0px; border: 0px; bottom: 10px">
+                            <nav aria-label="breadcrumb" xmlns="http://www.w3.org/1999/html">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item active" aria-current="page">{{ obj1.path }}</li>
+                                </ol>
+                            </nav>
+                        </li>
+                        <li class="list-group-item list-group-item"
+                            style="margin: auto 0px; bottom: 10px; border: 0px; padding: 10px 0px 0px 5px">
+                            <a href="http://127.0.0.1:5000/{{obj1.slug}}?path={{ obj1.path }}&name={{obj1.name}}&check={{ 1 }}&numbtable=1">
+                                <button type="button" class="btn btn-success btn-lg">
+                                    <span>&#8592;</span>Назад
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="list-group" style="height: 75px">
+                    <ul class="list-group list-group-horizontal-sm">
+                        <li class="list-group-item list-group-item" style="
+                    padding: 32px 0px 0px 0px; border: 0px;">
+                            <nav aria-label="breadcrumb" xmlns="http://www.w3.org/1999/html">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item active" aria-current="page"></li>
+                                </ol>
+                            </nav>
+                        </li>
+                        <li class="list-group-item list-group-item"
+                            style="margin: auto 0px; border: 0px; padding: 10px 0px 0px 5px">
+                            <a href="">
+                                <button disabled type="button" class="btn btn-success btn-lg">
+                                    <span>&#8592;</span>Назад
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="list-group" style="width: 550px;">
+                    <ul class="list-group list-group-horizontal-sm">
+                        <li style="width: 220px" class="list-group-item">Ім'я</li>
+                        <li style="width: 180px" class="list-group-item">Тип</li>
+                        <li style="width: 152px" class="list-group-item">Розмір</li>
+                    </ul>
+
+                    {% for data in table1 %}
+                    <div class="list-group" style="height: 40px;">
+                        <a style="height: 40px" class="list-group-item list-group-item-action"
+                           href="http://127.0.0.1:5000/{{data.slug}}?path={{ data.path }}&name={{ data.name }}&check={{ 0 }}&numbtable=1">
+                            <label style='width: 215px'>{{ data.name }}</label>
+                            <label style='width: 175px'>{{ data.type }}</label>
+                            <label>{{ data.size }}</label>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6" style="overflow-y: scroll; height: 600px; position: fixed; left: 750px">
+            {% if obj2 != '' and obj2.name != '' %}
+            <div class="list-group" style="height: 75px">
+                <ul class="list-group list-group-horizontal-sm">
+                    <li style="padding: 25px 0px 0px 0px; border: 0px; bottom: 10px"
+                        class="list-group-item list-group-item">
+                        <nav aria-label="breadcrumb" xmlns="http://www.w3.org/1999/html">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item active" aria-current="page">{{ obj2.path }}</li>
+                            </ol>
+                        </nav>
+                    </li>
+                    <li class="list-group-item list-group-item"
+                        style="margin: auto 0px; bottom: 10px; border: 0px; padding: 10px 0px 0px 5px">
+                        <a href="http://127.0.0.1:5000/{{obj2.slug}}?path={{ obj2.path }}&name={{obj2.name}}&check={{ 1 }}&numbtable=2">
+                            <button type="button" class="btn btn-success btn-lg">
+                                <span>&#8592;</span>Назад
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="list-group" style="height: 75px">
+                <ul class="list-group list-group-horizontal-sm">
+                    <li class="list-group-item list-group-item" style="
+                    padding: 32px 0px 0px 0px; border: 0px">
+                        <nav aria-label="breadcrumb" xmlns="http://www.w3.org/1999/html">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item active" aria-current="page"></li>
+                            </ol>
+                        </nav>
+                    </li>
+                    <li class="list-group-item list-group-item"
+                        style="margin: auto 0px; border: 0px; padding: 10px 0px 0px 5px">
+                        <a href="">
+                            <button disabled type="button" class="btn btn-success btn-lg">
+                                <span>&#8592;</span>Назад
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="list-group" style="height: 40px; width: 550px">
+                <ul class="list-group list-group-horizontal-sm">
+                    <li style="width: 220px" class="list-group-item">Ім'я</li>
+                    <li style="width: 180px" class="list-group-item">Тип</li>
+                    <li style="width: 152px" class="list-group-item">Розмір</li>
+                </ul>
+
+                {% for data in table2 %}
+                <div class="list-group" style="height: 40px">
+                    <a style="height: 40px" class="list-group-item list-group-item-action"
+                       href="http://127.0.0.1:5000/{{data.slug}}?path={{ data.path }}&name={{ data.name }}&check={{ 0 }}&numbtable=2">
+                        <label style='width: 215px'>{{ data.name }}</label>
+                        <label style='width: 175px'>{{ data.type }}</label>
+                        <label>{{ data.size }}</label>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
