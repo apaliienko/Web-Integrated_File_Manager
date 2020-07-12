@@ -14,6 +14,7 @@ class Data(models.Model):
     type = models.TextField(blank=True)
     size = models.TextField(blank=True)
 
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = gen_slug(self.path)
