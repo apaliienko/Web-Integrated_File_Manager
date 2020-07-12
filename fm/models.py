@@ -19,9 +19,7 @@ class Data(models.Model):
             self.slug = gen_slug(self.path)
         super().save(*args, **kwargs)
 
-    #class Meta:
-    #    ordering = ['name']
-
+   
     def __str__(self):
         return self.name
 
