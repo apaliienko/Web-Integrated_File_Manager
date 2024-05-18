@@ -1,6 +1,6 @@
 import os
 
-#output of data class
+# output of data class
 class Thing:
     def __init__(self, path):
         buf, name = '', ''
